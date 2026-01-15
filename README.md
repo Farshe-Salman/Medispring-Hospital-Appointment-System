@@ -39,4 +39,4 @@ The system allows patients to book doctor appointments based on branch-wise sche
 ---
 
 ## 👨‍💻 Developed By
-**Sadid Ahmed**
+**Md. Salman Farshe**
