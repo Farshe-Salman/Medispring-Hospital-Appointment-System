@@ -1,0 +1,18 @@
+﻿using DAL.EF.Models;
+using DAL.Interfaces;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DAL.Repos
+{
+    internal class BranchRepoV2 : IBranchFeature
+    {
+        public Branch Get(String Name)
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
