@@ -6,6 +6,7 @@ using DAL.Repos;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,40 +21,53 @@ namespace BLL.Services
         }
 
 
-        public bool Add(BranchDTO b)
+        public bool Add(AddBranchDTO b)
         {
             var mapper = MapperConfig.GetMapper();
-            var data = mapper.Map<Branch>(b);
-            return factory.RepositoryData().Add(data);
+            var br = mapper.Map<Branch>(b);
+            br.IsActive = true;
+            return factory.G_BranchRepository().Add(br);
         }
 
         public List<BranchDTO> GetAll()
         {
-            var data= factory.RepositoryData().GetAll();
+            var data= factory.G_BranchRepository().GetAll();
             return MapperConfig.GetMapper().Map<List<BranchDTO>>(data);
         }
 
         public BranchDTO Get(int id)
         {
-            var data= factory.RepositoryData().Get(id);
+            var data= factory.G_BranchRepository().Get(id);
             return MapperConfig.GetMapper().Map<BranchDTO>(data);
         }
 
         public BranchDTO Get(string name)
         {
-            var data = factory.BranchData().Get(name);
+            var data = factory.S_BranchRepo().Get(name);
             return MapperConfig.GetMapper().Map<BranchDTO>(data);
         }
 
         public bool Update(BranchDTO b)
         {
             var data= MapperConfig.GetMapper().Map<Branch>(b);
-            return factory.RepositoryData().Update(data);
+            return factory.G_BranchRepository().Update(data);
+
+            var existing = factory.G_BranchRepository().Get(b.Id);
+            if (existing == null) return false;
+
+            existing.BranchName = b.BranchName;
+            existing.Address = b.Address;
+
+            return factory.G_BranchRepository().Update(existing);
         }
 
-        public bool Delete(int id)
+        public bool Deactivate(int id)
         {
-            return factory.RepositoryData().Delete(id);
+            var b = factory.G_BranchRepository().Get(id);
+            if (b == null) return false;
+
+            b.IsActive = false;
+            return factory.G_BranchRepository().Update(b);
         }
 
     }

@@ -18,15 +18,43 @@ namespace DAL
             this.db = db;
         }
 
+        //For Branch
+        public IRepository<Branch> G_BranchRepository()
+        {
+            return new Repository<Branch>(db);
+        }
 
-        public IBranchFeature BranchData()
+        public IBranchFeature S_BranchRepo()
         {
             return new BranchRepo(db);
         }
 
-        public IRepository<Branch> RepositoryData()
+        //For doctor
+        public IRepository<Doctor> G_DoctorRepository()
         {
-             return new Repository<Branch>(db);
+            return new Repository<Doctor>(db);
+        }
+
+        public IDoctorFeature S_DoctorRepo()
+        {
+            return new DoctorRepo(db); 
+        }
+
+        //For Doctor Branch
+        public IDoctorBranchFeature S_DoctorBranchRepo()
+        {
+            return new DoctorBranchRepo(db);
+        }
+
+
+        //For DoctorSchedule
+        public IRepository<DoctorSchedule> G_DoctorScheduleRepository()
+        {
+            return new Repository<DoctorSchedule>(db);
+        }
+        public IDoctorScheduleFeature S_DoctorScheduleRepo()
+        {
+            return new DoctorScheduleRepo(db);
         }
     }
 }

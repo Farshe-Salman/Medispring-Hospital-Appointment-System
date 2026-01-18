@@ -4,6 +4,7 @@ using DAL.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(HDMSContext))]
-    partial class HDMSContextModelSnapshot : ModelSnapshot
+    [Migration("20260116220742_FinalAppointmentFix")]
+    partial class FinalAppointmentFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -88,9 +91,6 @@ namespace DAL.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<bool>("IsActive")
-                        .HasColumnType("bit");
-
                     b.HasKey("Id");
 
                     b.HasIndex("BranchName")
@@ -157,9 +157,6 @@ namespace DAL.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("BranchId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ConsultationDurationMin")
                         .HasColumnType("int");
 
                     b.Property<int>("DayOfWeek")
@@ -257,7 +254,7 @@ namespace DAL.Migrations
             modelBuilder.Entity("DAL.EF.Models.DoctorBranch", b =>
                 {
                     b.HasOne("DAL.EF.Models.Branch", "Branch")
-                        .WithMany("DoctorBranches")
+                        .WithMany()
                         .HasForeignKey("BranchId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -290,11 +287,6 @@ namespace DAL.Migrations
                     b.Navigation("Branch");
 
                     b.Navigation("Doctor");
-                });
-
-            modelBuilder.Entity("DAL.EF.Models.Branch", b =>
-                {
-                    b.Navigation("DoctorBranches");
                 });
 
             modelBuilder.Entity("DAL.EF.Models.Doctor", b =>

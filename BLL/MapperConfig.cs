@@ -15,6 +15,10 @@ namespace BLL
         static MapperConfiguration cfg = new MapperConfiguration(cfg =>
         {
             cfg.CreateMap<Branch, BranchDTO>().ReverseMap();
+            cfg.CreateMap<Branch, AddBranchDTO>().ReverseMap();
+            cfg.CreateMap<Doctor, DoctorDTO>().ReverseMap();
+            cfg.CreateMap<DoctorBranch, DoctorBranchDTO>().ReverseMap();
+            cfg.CreateMap<DoctorSchedule, DoctorScheduleDTO>().ReverseMap();
 
         });
 

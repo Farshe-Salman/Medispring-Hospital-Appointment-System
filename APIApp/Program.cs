@@ -16,9 +16,13 @@ builder.Services.AddSwaggerGen();
 
 //builder.Services.AddScoped(typeof(Repository<>));
 
-
 builder.Services.AddScoped<DataAccessFactory>();
+
 builder.Services.AddScoped<BranchService>();
+builder.Services.AddScoped<DoctorService>();
+builder.Services.AddScoped<DoctorBranchService>();
+builder.Services.AddScoped<DoctorScheduleService>();
+
 
 
 

@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace BLL.DTOs
 {
-    public class BranchDTO
+    public class DoctorDTO
     {
         public int Id { get; set; }
 
-        public string BranchName { get; set; }
+        public string? Name { get; set; }
 
-        public string Address { get; set; }
+        public string? Specialization { get; set; }
 
         public bool IsActive { get; set; }
     }
