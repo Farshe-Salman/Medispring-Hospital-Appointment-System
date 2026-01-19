@@ -22,6 +22,9 @@ builder.Services.AddScoped<BranchService>();
 builder.Services.AddScoped<DoctorService>();
 builder.Services.AddScoped<DoctorBranchService>();
 builder.Services.AddScoped<DoctorScheduleService>();
+builder.Services.AddScoped<AppointmentService>();
+builder.Services.AddScoped<EmailService>();
+builder.Services.AddScoped<PatientService>();
 
 
 

@@ -19,6 +19,8 @@ namespace BLL
             cfg.CreateMap<Doctor, DoctorDTO>().ReverseMap();
             cfg.CreateMap<DoctorBranch, DoctorBranchDTO>().ReverseMap();
             cfg.CreateMap<DoctorSchedule, DoctorScheduleDTO>().ReverseMap();
+            cfg.CreateMap<Appointment, AppointmentDTO>().ReverseMap();
+            cfg.CreateMap<Patient, PatientDTO>().ReverseMap();
 
         });
 

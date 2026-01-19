@@ -13,7 +13,7 @@ namespace DAL.Interfaces
 
         List<DoctorSchedule> GetByBranch(int bId);
 
-        DoctorSchedule? GetForDay(int dId, int bId, WeekDay day);
+        DoctorSchedule? GetForDay(int dId, int bId, WeekDay day, TimeSpan AppointmentTime);
 
         bool HasTimeOverlap(int dId, WeekDay day, TimeSpan start, TimeSpan end);
         DoctorSchedule? GetById(int dId);

@@ -30,13 +30,15 @@ namespace DAL.Repos
                 .ToList();
         }
 
-        public DoctorSchedule? GetForDay(int dId, int bId, WeekDay day)
+        public DoctorSchedule? GetForDay(int dId, int bId, WeekDay day, TimeSpan AppointmentTime)
         {
-            return db.DoctorSchedules.FirstOrDefault(
-                x =>
+            return db.DoctorSchedules.FirstOrDefault( x =>
                 x.DoctorId == dId &&
                 x.BranchId == bId &&
-                x.DayOfWeek == day);
+                x.DayOfWeek == day &&
+                x.StartTime <= AppointmentTime &&
+                x.EndTime > AppointmentTime
+                );
         }
 
         public bool HasTimeOverlap(int dId, WeekDay day, TimeSpan start, TimeSpan end)

@@ -4,6 +4,7 @@ using DAL.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DAL.Migrations
 {
     [DbContext(typeof(HDMSContext))]
-    partial class HDMSContextModelSnapshot : ModelSnapshot
+    [Migration("20260119012430_againModifyDoctorTable")]
+    partial class againModifyDoctorTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -212,12 +215,17 @@ namespace DAL.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<int?>("PatientId")
+                        .HasColumnType("int");
+
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasMaxLength(14)
                         .HasColumnType("nvarchar(14)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("PatientId");
 
                     b.ToTable("Patients");
                 });
@@ -243,7 +251,7 @@ namespace DAL.Migrations
                         .IsRequired();
 
                     b.HasOne("DAL.EF.Models.Patient", "Patient")
-                        .WithMany("Appointments")
+                        .WithMany()
                         .HasForeignKey("PatientId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -295,6 +303,13 @@ namespace DAL.Migrations
                     b.Navigation("Doctor");
                 });
 
+            modelBuilder.Entity("DAL.EF.Models.Patient", b =>
+                {
+                    b.HasOne("DAL.EF.Models.Patient", null)
+                        .WithMany("Patients")
+                        .HasForeignKey("PatientId");
+                });
+
             modelBuilder.Entity("DAL.EF.Models.Branch", b =>
                 {
                     b.Navigation("DoctorBranches");
@@ -307,7 +322,7 @@ namespace DAL.Migrations
 
             modelBuilder.Entity("DAL.EF.Models.Patient", b =>
                 {
-                    b.Navigation("Appointments");
+                    b.Navigation("Patients");
                 });
 #pragma warning restore 612, 618
         }

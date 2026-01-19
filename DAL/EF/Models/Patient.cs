@@ -27,5 +27,7 @@ namespace DAL.EF.Models
         public string PhoneNumber { get; set; }
 
         public bool IsActive { get; set; }=true;
+
+        public virtual ICollection<Appointment> Appointments { get; set; }
     }
 }

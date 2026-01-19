@@ -19,40 +19,22 @@ namespace BLL.Services
             this.config = config;
         }
 
-        public ServiceResultDTO Send(string ToEmail, string Subject, string Body)
+        public void Send(string ToEmail, string Subject, string Body)
         {
-            try
+            var from = config["EmailSettings:FromEmail"];
+            var pass = config["EmailSettings:AppPassword"];
+            var host = config["EmailSettings:SmtpServer"];
+            var port = int.Parse(config["EmailSettings:Port"]);
+
+            var msg = new MailMessage(from, ToEmail, Subject, Body);
+
+            var smtp = new SmtpClient(host, port)
             {
-                var from = config["EmailSettings:FromEmail"];
-                var pass = config["EmailSettings:AppPassword"];
-                var host = config["EmailSettings:SmtpServer"];
-                var port = int.Parse(config["EmailSettings:Port"]);
+                Credentials = new NetworkCredential(from, pass),
+                EnableSsl = true
+            };
 
-                var msg = new MailMessage(from, ToEmail, Subject, Body);
-
-                var smtp = new SmtpClient(host, port)
-                {
-                    Credentials = new NetworkCredential(from, pass),
-                    EnableSsl = true
-                };
-
-                smtp.Send(msg);
-
-                return new ServiceResultDTO
-                {
-                    Success = true,
-                    Message = "Email Sent Successfully"
-                };
-
-            }
-
-            catch (Exception ex) {
-                return new ServiceResultDTO
-                {
-                    Success = false,
-                    Message = ex.Message
-                };
-            }
+            smtp.Send(msg);
         }
     }
 }

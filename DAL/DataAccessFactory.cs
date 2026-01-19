@@ -56,5 +56,27 @@ namespace DAL
         {
             return new DoctorScheduleRepo(db);
         }
+
+
+        //For Appointment
+        public IRepository<Appointment> G_AppointmentRepository()
+        {
+            return new Repository<Appointment>(db);
+        }
+        public IAppointmentFeature S_AppointmentRepo()
+        {
+            return new AppointmentRepo(db);
+        }
+
+
+        //For Patient
+        public IRepository<Patient> G_PatientRepository()
+        {
+            return new Repository<Patient>(db);
+        }
+        public IPatientFeature S_PatientRepo()
+        {
+            return new PatientRepo(db);
+        }
     }
 }

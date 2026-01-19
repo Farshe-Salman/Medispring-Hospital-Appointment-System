@@ -27,7 +27,5 @@ namespace DAL.EF
                 .HasForeignKey(a => a.DoctorScheduleId)
                 .OnDelete(DeleteBehavior.Restrict);
         }
-
-
     }
 }
