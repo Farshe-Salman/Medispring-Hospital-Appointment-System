@@ -14,10 +14,12 @@ namespace BLL.Services
     public class DoctorScheduleService
     {
         DataAccessFactory factory;
+        EmailService email;
 
-        public DoctorScheduleService(DataAccessFactory factory)
+        public DoctorScheduleService(DataAccessFactory factory, EmailService email)
         {
             this.factory = factory;
+            this.email = email;
         }
 
         public ServiceResultDTO Add(DoctorScheduleDTO dto)
@@ -162,5 +164,73 @@ namespace BLL.Services
 
 
         }
+
+        public ServiceResultDTO DeactivateSchedule(int id)
+        {
+            var schedule = factory.G_DoctorScheduleRepository().Get(id);
+
+            if (schedule == null)
+                return new ServiceResultDTO
+                {
+                    Success = false,
+                    Message = "Doctor schedule not found"
+                };
+
+            if (!schedule.IsActive)
+                return new ServiceResultDTO
+                {
+                    Success = false,
+                    Message = "Doctor schedule already deactivated"
+                };
+
+            schedule.IsActive = false;
+            bool updated = factory.G_DoctorScheduleRepository().Update(schedule);
+
+            if (!updated)
+                return new ServiceResultDTO
+                {
+                    Success = false,
+                    Message = "Schedule could not be deactivated"
+                };
+
+            var appointments = factory.G_AppointmentRepository()
+                .GetAll()
+                .Where(a =>
+                    a.DoctorScheduleId == id &&
+                    a.AppointmentDate >= DateTime.Today &&
+                    (a.Status == AppointmentStatus.Approved ||
+                     a.Status == AppointmentStatus.Pending)
+                )
+                .ToList();
+
+            foreach (var ap in appointments)
+            {
+                ap.Status = AppointmentStatus.Canceled;
+                ap.Comment = "Canceled due to schedule deactivation";
+                factory.G_AppointmentRepository().Update(ap);
+
+                var patient = factory.G_PatientRepository().Get(ap.PatientId);
+
+                if (patient != null)
+                {
+                    email.Send(
+                        patient.Email,
+                        "Appointment Canceled",
+                        $"Dear {patient.Name},\n\n" +
+                        $"Your appointment on {ap.AppointmentDate:dd-MM-yyyy} " +
+                        $"has been canceled due to schedule changes.\n\n" +
+                        "Please reschedule your appointment.\n\n" +
+                        "Medispring Hospital"
+                    );
+                }
+            }
+
+            return new ServiceResultDTO
+            {
+                Success = true,
+                Message = $"Schedule deactivated and {appointments.Count} appointments canceled"
+            };
+        }
+
     }
 }

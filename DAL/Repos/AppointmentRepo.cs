@@ -36,5 +36,11 @@ namespace DAL.Repos
             return s.Any() ? s.Max() : 0;
         }
 
+        public List<Appointment> GetDailyAppointment(DateTime date)
+        {
+            return db.Appointments
+                .Where(a => a.AppointmentDate.Date == date.Date)
+                .ToList();
+        }
     }
 }

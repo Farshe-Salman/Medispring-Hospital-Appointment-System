@@ -55,7 +55,7 @@ namespace APIApp.Controllers
             }
         }
 
-        [HttpGet("find/id/{id}")]
+        [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
             try
@@ -72,14 +72,32 @@ namespace APIApp.Controllers
             }
         }
 
-        [HttpGet("find/name/{name}")]
-        public IActionResult GetByName(string name)
+
+        //[HttpGet("find/name/{name}")]
+        //public IActionResult GetByName(string name)
+        //{
+        //    try
+        //    {
+        //        var data = service.SearchByName(name);
+        //        if (data.Count == 0)
+        //            return NotFound("Data not found");
+
+        //        return Ok(data);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return BadRequest(ex.Message);
+        //    }
+        //}
+
+        [HttpGet("search/{keyword}")]
+        public IActionResult Search(string keyword)
         {
             try
             {
-                var data = service.SearchByName(name);
-                if (data.Count == 0)
-                    return NotFound("Data not found");
+                var data = service.Search(keyword);
+                if (data == null)
+                    return NotFound("Doctor not found");
 
                 return Ok(data);
             }
@@ -110,20 +128,38 @@ namespace APIApp.Controllers
         {
             try
             {
-                int d = id;
-                var data = service.Deactivate(id);
-                if (data == true)
+                var res = service.Deactivate(id);
+
+                if (res.Success)
                 {
-                    return Ok("id " + d + " is now deactivate");
+                    return Ok(res.Message);
                 }
                 else
-                {
-                    return BadRequest("id " + d + " Doctor not deactivated from the system");
-                }
+                    return BadRequest(res.Message);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPost("activate/{id}")]
+        public IActionResult Activate(int id)
+        {
+            try
+            {
+                var res = service.Activate(id);
+
+                if (res.Success)
+                {
+                    return Ok(res.Message);
+                }
+                else
+                    return BadRequest(res.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -133,6 +169,90 @@ namespace APIApp.Controllers
             try
             {
                 var data = service.GetActiveDoctors();
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("allDoctorsWithAppointments")]
+        public IActionResult AllDoctorsWithAppointments()
+        {
+            try
+            {
+                var data = service.AllDoctorsWithAppointments();
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("getDoctorWithAppintment/{id}")]
+        public IActionResult GetDoctorWithAppointments(int id)
+        {
+            try
+            {
+                var data = service.GetDoctorWithAppointments(id);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("allDoctorsWithUpcommingAppointments")]
+        public IActionResult AllDoctorsWithUpcommingAppointments()
+        {
+            try
+            {
+                var data = service.AllDoctorsWithUpcommingAppointments();
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("getDoctorWithUpcommingAppointments/{id}")]
+        public IActionResult GetDoctorWithUpcommingAppointments(int id)
+        {
+            try
+            {
+                var data = service.GetDoctorWithUpcommingAppointments(id);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("allDoctorsWithUpcommingAppointmentsIndividualBranch/{bId}")]
+        public IActionResult AllDoctorsWithUpcommingAppointmentsIndividualBranch(int bId)
+        {
+            try
+            {
+                var data = service.AllDoctorsWithUpcommingAppointmentsIndividualBranch(bId);
+                return Ok(data);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("getDoctorWithUpcommingAppointmentsIndividualBranch/{dId}/{bId}")]
+        public IActionResult GetDoctorWithUpcommingAppointmentsIndividualBranch(int dId, int bId)
+        {
+            try
+            {
+                var data = service.GetDoctorWithUpcommingAppointmentsIndividualBranch(dId, bId);
                 return Ok(data);
             }
             catch (Exception ex)

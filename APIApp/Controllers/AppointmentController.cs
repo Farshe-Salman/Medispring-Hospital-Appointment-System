@@ -36,6 +36,19 @@ namespace APIApp.Controllers
             }
         }
 
+        [HttpGet("all")]
+        public IActionResult All()
+        {
+            try
+            {
+                var res = service.AppointmentList();
+                return Ok(res);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message); 
+            }
+        }
 
         [HttpPost("cancel/{id}")]
         public IActionResult Cancel(int id, [FromBody]  string reason)
@@ -53,6 +66,20 @@ namespace APIApp.Controllers
                 }
             }
             catch(Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPost("getDailyReport/{date}")]
+        public IActionResult GetDailyReport(DateTime  date)
+        {
+            try
+            {
+                return Ok(service.GetDailyReport(date));
+                
+            }
+            catch (Exception ex)
             {
                 return StatusCode(500, ex.Message);
             }

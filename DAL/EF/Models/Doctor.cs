@@ -23,5 +23,12 @@ namespace DAL.EF.Models
         public bool IsActive { get; set; }=true;
 
         public virtual List<DoctorBranch> DoctorBranches { get; set; }
+
+        public virtual List<Appointment> Appointments { get; set; }
+
+        public Doctor()
+        {
+            Appointments = new List<Appointment>();
+        }
     }
 }

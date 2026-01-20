@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace DAL.Interfaces
 {
-    public interface IBranchFeature
+    public interface IAppointmentReportFeature
     {
-        List<Branch> Search(string keyword);
+        List<Appointment> GetDailyReport(DateTime date);
     }
 }

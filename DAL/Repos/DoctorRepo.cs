@@ -1,6 +1,7 @@
 ﻿using DAL.EF;
 using DAL.EF.Models;
 using DAL.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace DAL.Repos
 
         public DoctorRepo(HDMSContext db)
         {
-            this.db = db; 
+            this.db = db;
         }
 
         public List<Doctor> GetActiveDoctors()
@@ -24,17 +25,91 @@ namespace DAL.Repos
             return db.Doctors
                 .Where(d => d.IsActive)
                 .ToList();
-           
+
         }
 
-        public List<Doctor> SearchByName(string name)
+        //public List<Doctor> SearchByName(string name)
+        //{
+        //    var list = new List<Doctor>();
+        //    list = db.Doctors
+        //        .Where(d => d.Name == name)
+        //        .ToList();
+        //    return list;
+        //}
+
+        public List<Doctor> Search(string keyword)
         {
-            var list = new List<Doctor>();
-            list=db.Doctors
-                .Where (d => d.Name == name)
+            return db.Doctors
+                .Where(d =>
+                d.Name.Contains(keyword) ||
+                d.Specialization.Contains(keyword))
                 .ToList();
-            return list;
         }
 
+
+        public List<Doctor> AllDoctorsWithAppointments()
+        {
+            var appointments = db.Doctors
+                .Include(x => x.Appointments)
+                .ToList();
+            return appointments;
+        }
+
+        public Doctor GetDoctorWithAppointments(int id)
+        {
+            var appointments = db.Doctors
+                .Include(x => x.Appointments)
+                .SingleOrDefault(x => x.Id == id);
+            return appointments;
+        }
+
+        public List<Doctor> AllDoctorsWithUpcommingAppointments()
+        {
+            var appointments = db.Doctors
+                .Include(x => x.Appointments
+                .Where(a => a.Status == AppointmentStatus.Approved &&
+                a.AppointmentDate >= DateTime.Today
+                ))
+                .Where(x => x.IsActive)
+                .ToList();
+            return appointments;
+        }
+
+        public Doctor GetDoctorWithUpcommingAppointments(int id)
+        {
+            var appointments = db.Doctors
+                .Include(x => x.Appointments
+                .Where(a => a.Status == AppointmentStatus.Approved &&
+                a.AppointmentDate >= DateTime.Today
+                ))
+                .SingleOrDefault(x => x.Id == id);
+            return appointments;
+        }
+
+        public List<Doctor> AllDoctorsWithUpcommingAppointmentsIndividualBranch(int bId)
+        {
+            var appointments = db.Doctors
+                .Include(x => x.Appointments
+                .Where(a => a.Status == AppointmentStatus.Approved &&
+                a.BranchId == bId &&
+                a.AppointmentDate >= DateTime.Today
+                ))
+                .Where(x => x.IsActive)
+                .ToList();
+            return appointments;
+        }
+
+        public Doctor GetDoctorWithUpcommingAppointmentsIndividualBranch(int dId, int bId)
+        {
+            var appointments = db.Doctors
+                .Include(x => x.Appointments
+                .Where(a => a.Status == AppointmentStatus.Approved &&
+                a.BranchId == bId &&
+                a.AppointmentDate >= DateTime.Today
+                ))
+                .SingleOrDefault(x => x.Id == dId);
+            return appointments;
+
+        }
     }
 }

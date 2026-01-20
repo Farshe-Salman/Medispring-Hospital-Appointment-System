@@ -67,6 +67,15 @@ namespace BLL.Services
                 };
             }
 
+            if(schedule.IsActive==false)
+            {
+                return new ServiceResultDTO
+                {
+                    Success = false,
+                    Message = "This Schdule is not active"
+                };
+            }
+
             //if(dto.AppointmentTime < schedule.StartTime || dto.AppointmentTime >= schedule.EndTime)
             //{
             //    return new ServiceResultDTO
@@ -109,7 +118,7 @@ namespace BLL.Services
             {
                 email.Send(
                     patient.Email,
-                    $"Appointment Approved {SerialTime}",
+                    $"Appointment Approved at {SerialTime} In {dto.AppointmentDate:dd-MM-yyyy}",
                     $"MediSpring Hospital\nYour appointment is approved.\nPatient Name: {patient.Name}\nDoctor Name: {doctor.Name}\nSerial: {serial}\nSerial Time: {SerialTime}\nDate: {dto.AppointmentDate:dd-MM-yyyy}\n\n\nThank you\nFor any query contact with us via: \nPhone: 01319946481 \nEmail: info@medispring.com"
                     );
             }
@@ -130,6 +139,22 @@ namespace BLL.Services
                     : "Rejected. Email sent."
             };
 
+        }
+
+        public List<FullAppointmentDTO> AppointmentList()
+        {
+            var data = factory.G_AppointmentRepository().GetAll();
+            return data.Select(x => new FullAppointmentDTO
+            {
+                Id = x.Id,
+                PatientId = x.PatientId,
+                DoctorId = x.DoctorId,
+                BranchId = x.BranchId,
+                DoctorScheduleId = x.DoctorScheduleId,
+                AppointmentDate = x.AppointmentDate,
+                AppointmentTime = x.AppointmentTime,
+                Status = x.Status
+            }).ToList();
         }
 
         public ServiceResultDTO Cancel(int id, string reason)
@@ -165,5 +190,26 @@ namespace BLL.Services
             };
 
         }
+
+
+        public List<AppointmentReportDTO> GetDailyReport(DateTime date)
+        {
+            var data = factory.S_AppointmentRepo().GetDailyAppointment(date);
+
+            return data
+                .GroupBy(a => a.AppointmentDate.Date)
+                .Select(g => new AppointmentReportDTO
+                {
+                    Date = g.Key,
+                    TotalAppointments = g.Count(),
+                    Approved = g.Count(a => a.Status == AppointmentStatus.Approved),
+                    Rejected = g.Count(a => a.Status == AppointmentStatus.Rejected),
+                    Cancelled = g.Count(a => a.Status == AppointmentStatus.Canceled)
+                })
+                .ToList();
+        }
+
+
+
     }
 }

@@ -73,12 +73,12 @@ namespace APIApp.Controllers
             }
         }
 
-        [HttpGet("find/name/{name}")]
-        public IActionResult Get(string name)
+        [HttpGet("search/{keyword}")]
+        public IActionResult Search(string keyword)
         {
             try
             {
-                var data = service.Get(name);
+                var data = service.Search(keyword);
                 if (data == null)
                     return NotFound("Data not found");
 
@@ -90,13 +90,15 @@ namespace APIApp.Controllers
             }
         }
 
-        [HttpPut("update")]
+        [HttpPatch("update")]
         public IActionResult Update(BranchDTO b)
         {
             try
             {
-                var data = service.Update(b);
-                return Ok("Branch Updated");
+                var res = service.Update(b);
+                if (res == true)
+                    return Ok("Branch Updated");
+                return BadRequest("Branch update failed");
             }
             catch (Exception ex)
             {
@@ -105,24 +107,42 @@ namespace APIApp.Controllers
         }
 
         [HttpPost("deactivate/{id}")]
-        public IActionResult Delete(int id)
+        public IActionResult Deactivate(int id)
         {
             try
             {
-                int d = id;
-                var data = service.Deactivate(id);
-                if (data == true)
+                var res = service.Deactivate(id);
+
+                if (res.Success)
                 {
-                    return Ok("id " + d + " is removed");
+                    return Ok(res.Message);
                 }
                 else
-                {
-                    return BadRequest("id " + d + " Branch not removed from the system");
-                }
+                    return BadRequest(res.Message);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPost("activate/{id}")]
+        public IActionResult Activate(int id)
+        {
+            try
+            {
+                var res = service.Activate(id);
+
+                if (res.Success)
+                {
+                    return Ok(res.Message);
+                }
+                else
+                    return BadRequest(res.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
             }
         }
     }

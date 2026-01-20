@@ -12,6 +12,5 @@ namespace DAL.Interfaces
         List<T> GetAll();
         T? Get(int id);
         bool Update(T entity);
-        bool Delete(int id);
     }
 }

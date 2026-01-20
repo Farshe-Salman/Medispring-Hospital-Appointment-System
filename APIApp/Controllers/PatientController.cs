@@ -69,7 +69,7 @@ namespace APIApp.Controllers
         }
 
 
-        [HttpGet("searcch/{keyword}")]
+        [HttpGet("search/{keyword}")]
         public IActionResult Search(string keyword)
         {
             try
@@ -83,6 +83,62 @@ namespace APIApp.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPatch("update")]
+        public IActionResult Update(PatientDTO p)
+        {
+            try
+            {
+                var res = service.Update(p);
+                if (res == true)
+                    return Ok("Patient Updated");
+                return BadRequest("Patinet update failed");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("deactivate/{id}")]
+        public IActionResult Deactivate(int id)
+        {
+            try
+            {
+                var res = service.Deactivate(id);
+
+                if (res.Success)
+                {
+                    return Ok(res.Message);
+                }
+                else
+                    return BadRequest(res.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
+        }
+
+        [HttpPost("activate/{id}")]
+        public IActionResult Activate(int id)
+        {
+            try
+            {
+                var res = service.Activate(id);
+
+                if (res.Success)
+                {
+                    return Ok(res.Message);
+                }
+                else
+                    return BadRequest(res.Message);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
             }
         }
 
@@ -119,9 +175,6 @@ namespace APIApp.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-
-        //Deactivate
 
     }
 }

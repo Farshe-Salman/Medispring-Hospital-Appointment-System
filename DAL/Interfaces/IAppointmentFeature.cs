@@ -12,5 +12,9 @@ namespace DAL.Interfaces
         int CountApproved(int doctorId, DateTime date);
         int GetMaxSerial(int doctorId, DateTime date);
 
+        List<Appointment> GetDailyAppointment(DateTime date);
+
+
+
     }
 }

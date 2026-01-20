@@ -45,15 +45,6 @@ namespace DAL.Repos
             return db.SaveChanges() > 0;
         }
 
-        public bool Delete(int id)
-        {
-            var ex = Get(id);
-            if(ex==null) { return false; }
-
-            table.Remove(ex);
-            return db.SaveChanges() > 0;
-        }
-
 
     }
 }

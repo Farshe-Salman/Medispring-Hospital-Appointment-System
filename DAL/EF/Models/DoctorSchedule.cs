@@ -38,6 +38,8 @@ namespace DAL.EF.Models
         [StringLength(20)]
         public string RoomNumber { get; set; }
 
+        public bool IsActive { get; set; } = true;
+
 
         public virtual Doctor Doctor { get; set; }
 

@@ -10,7 +10,7 @@ namespace DAL.Repos
 {
     internal class BranchRepoV2 : IBranchFeature
     {
-        public Branch Get(String Name)
+        public List<Branch> Search(string keyword)
         {
             throw new NotImplementedException();
         }

@@ -19,22 +19,30 @@ namespace BLL.Services
             this.config = config;
         }
 
-        public void Send(string ToEmail, string Subject, string Body)
+        public void Send(string toEmail, string subject, string body)
         {
-            var from = config["EmailSettings:FromEmail"];
-            var pass = config["EmailSettings:AppPassword"];
+            var fromEmail = config["EmailSettings:FromEmail"];
+            var password = config["EmailSettings:AppPassword"];
             var host = config["EmailSettings:SmtpServer"];
             var port = int.Parse(config["EmailSettings:Port"]);
 
-            var msg = new MailMessage(from, ToEmail, Subject, Body);
+            var fromAddress = new MailAddress(fromEmail, "Medispring Hospital");
+            var toAddress = new MailAddress(toEmail);
+
+            var msg = new MailMessage(fromAddress, toAddress)
+            {
+                Subject = subject,
+                Body = body
+            };
 
             var smtp = new SmtpClient(host, port)
             {
-                Credentials = new NetworkCredential(from, pass),
+                Credentials = new NetworkCredential(fromEmail, password),
                 EnableSsl = true
             };
 
             smtp.Send(msg);
         }
+
     }
 }

@@ -29,19 +29,24 @@ namespace DAL.Repos
                 .ToList();
         }
 
+
+
         public List<Appointment> GetAppointmentHistory(int pId)
         {
             return db.Appointments
-        .Include(a => a.Doctor)
-        .Include(a => a.Branch)
-        .Where(a => a.PatientId == pId)
-        .OrderByDescending(a => a.AppointmentDate)
-        .ToList();
+                .Include(a => a.Doctor)
+                .Include(a => a.Branch)
+                .Where(a => a.PatientId == pId)
+                .OrderByDescending(a => a.AppointmentDate)
+                .ToList();
+
         }
 
         public List<Appointment> GetUpcomingAppointments(int pId)
         {
             return db.Appointments
+                .Include(a => a.Doctor)
+                .Include(a => a.Branch)
                 .Where(a=> a.PatientId == pId &&
                 a.AppointmentDate>=DateTime.Today &&
                 a.Status==AppointmentStatus.Approved)

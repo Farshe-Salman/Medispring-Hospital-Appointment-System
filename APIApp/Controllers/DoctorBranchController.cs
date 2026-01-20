@@ -39,7 +39,7 @@ namespace APIApp.Controllers
             }
         }
 
-        [HttpGet("branch/{bId})")]
+        [HttpGet("branch/{bId}")]
         public IActionResult GetDoctorsByBranch(int bId)
         {
             try
@@ -58,7 +58,7 @@ namespace APIApp.Controllers
             }
         }
 
-        [HttpGet("doctor/dId")]
+        [HttpGet("doctor/{dId}")]
         public IActionResult GetBranchesByDoctor(int dId)
         {
             try

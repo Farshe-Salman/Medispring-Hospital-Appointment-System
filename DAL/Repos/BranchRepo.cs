@@ -33,10 +33,10 @@ namespace DAL.Repos
         //    return db.Branches.Find(id);
         //}
 
-        public Branch Get(string name)
-        {
-            return db.Branches.FirstOrDefault(b => b.BranchName == name);
-        }
+        //public Branch Get(string name)
+        //{
+        //    return db.Branches.FirstOrDefault(b => b.BranchName == name);
+        //}
 
         //public bool Update(Branch branch)
         //{
@@ -53,5 +53,14 @@ namespace DAL.Repos
         //    db.Remove(ex);
         //    return db.SaveChanges() > 0;
         //}
+
+        public List<Branch> Search(string keyword)
+        {
+            return db.Branches
+                .Where(p =>
+                p.BranchName.Contains(keyword) ||
+                p.Address.Contains(keyword))
+                .ToList();
+        }
     }
 }
