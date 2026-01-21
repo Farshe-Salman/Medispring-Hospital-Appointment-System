@@ -1,8 +1,12 @@
+using BLL.Jwt;
+using BLL.Services;
+using DAL;
 using DAL.EF;
 using DAL.Repos;
-using BLL.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using DAL;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,12 +29,25 @@ builder.Services.AddScoped<DoctorScheduleService>();
 builder.Services.AddScoped<AppointmentService>();
 builder.Services.AddScoped<EmailService>();
 builder.Services.AddScoped<PatientService>();
-
-
-
+builder.Services.AddScoped<AuthService>();  
+builder.Services.AddSingleton<JwtService>();  
 
 builder.Services.AddDbContext<HDMSContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DBConn")));
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+.AddJwtBearer(opt =>
+{
+    opt.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = false,
+        ValidateAudience = false,
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes("THIS_IS_MY_SUPER_SECRET_KEY_12345")
+        )
+    };
+});
 
 var app = builder.Build();
 
@@ -42,6 +59,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseAuthentication();
 
 app.UseAuthorization();
 

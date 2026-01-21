@@ -1,6 +1,7 @@
 ﻿using BLL.DTOs;
 using BLL.Services;
 using DAL.EF.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,7 +17,7 @@ namespace APIApp.Controllers
         {
             this.service = service;
         }
-
+        [Authorize(Roles = "admin,branchManager")]
         [HttpPost("add")]
         public IActionResult Add(AddBranchDTO b)
         {
@@ -39,6 +40,7 @@ namespace APIApp.Controllers
             }
         }
 
+
         [HttpGet("all")]
         public IActionResult GetAll()
         {
@@ -56,7 +58,8 @@ namespace APIApp.Controllers
             }
         }
 
-        [HttpGet("find/id/{id}")]
+
+        [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
             try
@@ -90,6 +93,7 @@ namespace APIApp.Controllers
             }
         }
 
+        [Authorize(Roles = "admin,branchManager")]
         [HttpPatch("update")]
         public IActionResult Update(BranchDTO b)
         {
@@ -106,6 +110,7 @@ namespace APIApp.Controllers
             }
         }
 
+        [Authorize(Roles = "admin,branchManager")]
         [HttpPost("deactivate/{id}")]
         public IActionResult Deactivate(int id)
         {
@@ -126,6 +131,7 @@ namespace APIApp.Controllers
             }
         }
 
+        [Authorize(Roles = "admin,branchManager")]
         [HttpPost("activate/{id}")]
         public IActionResult Activate(int id)
         {

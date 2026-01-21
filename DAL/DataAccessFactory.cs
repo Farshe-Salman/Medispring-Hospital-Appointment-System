@@ -78,5 +78,16 @@ namespace DAL
         {
             return new PatientRepo(db);
         }
+
+        //For User
+        public IRepository<User> G_UserRepository()
+        {
+            return new Repository<User>(db); 
+        }
+        public IUserFeature S_UserRepo()
+        {
+            return new UserRepo(db);
+        }
+
     }
 }

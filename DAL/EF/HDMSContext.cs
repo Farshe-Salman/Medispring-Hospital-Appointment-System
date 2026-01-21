@@ -18,6 +18,8 @@ namespace DAL.EF
         public DbSet<Models.DoctorSchedule> DoctorSchedules { get; set; }
         public DbSet<Models.Patient> Patients { get; set; }
         public DbSet<Models.Appointment> Appointments { get; set; }
+        public DbSet<Models.User> Users { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

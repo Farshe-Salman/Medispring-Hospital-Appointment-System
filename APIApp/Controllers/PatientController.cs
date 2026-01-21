@@ -31,7 +31,7 @@ namespace APIApp.Controllers
             }
         }
 
-
+        
         [HttpGet("all")]
         public IActionResult All()
         {

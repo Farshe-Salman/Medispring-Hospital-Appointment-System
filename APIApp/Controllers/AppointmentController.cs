@@ -1,5 +1,6 @@
 ﻿using BLL.DTOs;
 using BLL.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,6 +17,7 @@ namespace APIApp.Controllers
             this.service = service;
         }
 
+        [Authorize]
         [HttpPost("book")]
         public IActionResult Book(AppointmentDTO dto)
         {
@@ -36,6 +38,7 @@ namespace APIApp.Controllers
             }
         }
 
+        [Authorize(Roles = "admin")]
         [HttpGet("all")]
         public IActionResult All()
         {
@@ -46,10 +49,12 @@ namespace APIApp.Controllers
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message); 
+                return StatusCode(500, ex.Message);
             }
         }
 
+
+        [Authorize(Roles = "admin")]
         [HttpPost("cancel/{id}")]
         public IActionResult Cancel(int id, [FromBody]  string reason)
         {
