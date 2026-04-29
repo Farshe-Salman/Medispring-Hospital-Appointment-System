@@ -127,15 +127,6 @@ This project fulfills and exceeds academic requirements by implementing:
 
 ---
 
-## 📌 Project Status
-
-✅ Completed  
-✅ Viva-ready  
-✅ Production-style logic  
-✅ Fully documented  
-
----
-
 ## 👤 Author
 
 **Salman Farshe**  
